@@ -1,5 +1,6 @@
 package net.nickgeoghegan.scootybus;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,11 +9,19 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.widget.Toast;
 import android.util.Log;
+import android.view.View;
 
 
 
 
 public class MainActivity extends ActionBarActivity {
+
+    /**
+     * Intent Request Codes
+     */
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
+    private static final int REQUEST_ENABLE_DISCOVERABILITY = 2;
+
 
     /**
      * Sets the tag for logging
@@ -33,6 +42,11 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         /**
+         * Basic logging to see if we are in this function
+         */
+        Log.d(TAG, "In OnCreate()");
+
+        /**
          * Sanity check to ensure the device actually has a bluetooth adapter
          */
         if (mBluetoothAdapter == null) {
@@ -46,6 +60,40 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    public void onButtonBluetoothConnect(View view) {
+
+        Log.d(TAG, "In onButtonBluetoothConnect()");
+
+        /**
+         * Enables the bluetooth adapter, if it's disabled, and sets the device into discovery mode
+         */
+         if (!mBluetoothAdapter.isEnabled()) {
+             Intent enableBlueTooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+             startActivityForResult(enableBlueTooth, REQUEST_ENABLE_BLUETOOTH);
+             Toast.makeText(getApplicationContext(), "Enabling Bluetooth", Toast.LENGTH_LONG).show();
+             Log.d(TAG, "Enabling Bluetooth");
+         }
+         else {
+             Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_LONG).show();
+             Log.d(TAG, "Bluetooth is already enabled");
+         }
+
+        /**
+         * Enables bluetooth discovery, if it's not already enabled.
+         * TODO: Verify that this is actually needed in real life if we have already paired with a device
+         */
+        if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent enableDiscovery = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            startActivityForResult(enableDiscovery, REQUEST_ENABLE_DISCOVERABILITY);
+            Toast.makeText(getApplicationContext(), "Enabling Discovery", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Enabling Discovery");
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Discovery is already enabled", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Discovery is already enabled");
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

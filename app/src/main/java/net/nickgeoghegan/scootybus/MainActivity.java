@@ -4,14 +4,46 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.widget.Toast;
+import android.util.Log;
+
+
 
 
 public class MainActivity extends ActionBarActivity {
+
+    /**
+     * Sets the tag for logging
+     */
+    private static final String TAG = "ScootyBus";
+
+
+    /**
+     * Gets the device's default Bluetooth Adapter
+     */
+    private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /**
+         * Sanity check to ensure the device actually has a bluetooth adapter
+         */
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(getApplicationContext(), "This device does not support bluetooth", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "This device does not support bluetooth... Requesting app to be killed");
+
+            /**
+             * Since this device does not have a bluetooth adapter, ask Android to kill the app
+             */
+            finish();
+        }
     }
 
 

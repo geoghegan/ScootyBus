@@ -95,6 +95,28 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    public void onButtonCloseApp(View view) {
+
+        Log.d(TAG, "In onButtonCloseApp()");
+
+        /**
+         * Disables bluetooth
+         */
+        if (mBluetoothAdapter.isEnabled()) {
+            mBluetoothAdapter.disable();
+            Toast.makeText(getApplicationContext(), "Disabling Bluetooth. Press again to close", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Disabling Bluetooth");
+        }
+        /**
+         * Actually closes the app
+         */
+        else {
+            Log.d(TAG, "Closing App");
+            finish();
+        }
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

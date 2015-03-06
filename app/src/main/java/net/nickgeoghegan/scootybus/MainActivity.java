@@ -210,4 +210,34 @@ public class MainActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     *  Clean up the bluetooth system when shutting down
+     *  Kinda negates the work done in onButtonCloseApp()
+     */
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        /**
+         * Disable discovery
+         * TODO: Maybe just call this without the if statement
+         */
+        if (mBluetoothAdapter != null)
+        {
+            mBluetoothAdapter.cancelDiscovery();
+        }
+
+        /**
+         * Disable bluetooth
+         * TODO: Maybe just call this without the if statement
+         */
+        if (mBluetoothAdapter.isEnabled())
+        {
+            mBluetoothAdapter.disable();
+        }
+
+    }
+
 }

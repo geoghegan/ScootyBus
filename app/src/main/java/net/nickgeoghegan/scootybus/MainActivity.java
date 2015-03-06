@@ -241,4 +241,15 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        ; // noop
+        /**
+         * TODO: Release the bluetooth handler here
+         */
+
+    }
 }

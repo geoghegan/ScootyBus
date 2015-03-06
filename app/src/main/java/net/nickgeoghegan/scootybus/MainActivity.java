@@ -107,9 +107,9 @@ public class MainActivity extends ActionBarActivity
         }
 
        /* *//**
-         * Enables bluetooth discovery, if it's not already enabled.
-         * TODO: Verify that this is actually needed in real life if we have already paired with a device
-         *//*
+     * Enables bluetooth discovery, if it's not already enabled.
+     * TODO: Verify that this is actually needed in real life if we have already paired with a device
+     *//*
         if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE)
         {
             Intent enableDiscovery = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -151,8 +151,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     *  Show a list of paired devices
-     *  TODO: Get rid of the button and just show a clickable list on startup
+     * Show a list of paired devices
+     * TODO: Get rid of the button and just show a clickable list on startup
      */
     public void showDevices(View view)
     {
@@ -168,10 +168,10 @@ public class MainActivity extends ActionBarActivity
         }
 
         listView = (ListView) findViewById(R.id.listView);
-        final ArrayAdapter adapter = new ArrayAdapter (this, android.R.layout.simple_list_item_1, list);
+        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
 
-        if(list.isEmpty() && mBluetoothAdapter.isEnabled())
+        if (list.isEmpty() && mBluetoothAdapter.isEnabled())
         {
             Toast.makeText(getApplicationContext(), "No Paired Devices", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "No Paired Devices");
@@ -212,8 +212,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     *  Clean up the bluetooth system when shutting down
-     *  Kinda negates the work done in onButtonCloseApp()
+     * Clean up the bluetooth system when shutting down
+     * Kinda negates the work done in onButtonCloseApp()
      */
 
     @Override
@@ -252,4 +252,17 @@ public class MainActivity extends ActionBarActivity
          */
 
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        ; // noop
+        /**
+         * TODO: Re-enable bluetooth and init the connection again
+         */
+
+    }
+
 }

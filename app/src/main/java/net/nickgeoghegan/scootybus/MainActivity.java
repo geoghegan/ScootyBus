@@ -217,7 +217,8 @@ public class MainActivity extends ActionBarActivity
      */
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         super.onDestroy();
 
         /**

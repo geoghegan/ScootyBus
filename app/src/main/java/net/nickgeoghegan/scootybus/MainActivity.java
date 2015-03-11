@@ -1,5 +1,6 @@
 package net.nickgeoghegan.scootybus;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -8,12 +9,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 import android.view.View;
 import android.app.ListActivity;
 import android.widget.ListView;
+import android.content.DialogInterface;
+
 
 
 
@@ -31,6 +36,10 @@ public class MainActivity extends ActionBarActivity
     private static final int REQUEST_ENABLE_BLUETOOTH = 1;
     private static final int REQUEST_ENABLE_DISCOVERABILITY = 2;
 
+    /**
+     * Return Intent extra
+     */
+    public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
     /**
      * Sets the tag for logging
@@ -157,6 +166,7 @@ public class MainActivity extends ActionBarActivity
     public void showDevices(View view)
     {
 
+        Log.d(TAG, "In showDevices()");
         pairedDevices = mBluetoothAdapter.getBondedDevices();
         listView = (ListView) findViewById(R.id.listView);
         ArrayList list = new ArrayList();
@@ -170,6 +180,7 @@ public class MainActivity extends ActionBarActivity
         listView = (ListView) findViewById(R.id.listView);
         final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(mDeviceClickListener);
 
         if (list.isEmpty() && mBluetoothAdapter.isEnabled())
         {
@@ -184,7 +195,51 @@ public class MainActivity extends ActionBarActivity
 
         }
 
+        Log.d(TAG, "Finished showDevices()");
+
     }
+
+    /**
+     * Selects a bluetooth device from the list
+     */
+    private AdapterView.OnItemClickListener mDeviceClickListener  = new AdapterView.OnItemClickListener()
+    {
+
+        /**
+         *
+         * @param foo -- meaningless, can be anything
+         * @param view -- Only used to init the TextView
+         * @param bar -- meaningless, can be anything
+         * @param baz -- meaningless, can be anything
+         */
+        public void onItemClick(AdapterView<?> foo , View view, int bar, long baz)
+        {
+
+            Log.d(TAG, "In OnItemClick()");
+
+            /**
+             * Get the device MAC address, which is the last 17 chars in the View
+             * TODO: Try to get rid of the 17 as a Magic Number
+             */
+            String info = ((TextView) view).getText().toString();
+            String address = info.substring(info.length() - 17);
+            Log.d(TAG, "Selected MAC Address: " + address );
+
+            /**
+             * Creates the result Intent and includes the MAC address
+             */
+            Intent intent = new Intent();
+            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+
+            /**
+             * Sets the result
+             */
+            setResult(Activity.RESULT_OK, intent);
+            Log.d(TAG, "Finished OnItemClick()");
+
+        }
+
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

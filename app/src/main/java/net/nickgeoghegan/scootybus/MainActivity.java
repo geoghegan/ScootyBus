@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity
     private static final int REQUEST_ENABLE_DISCOVERABILITY = 2;
 
     /**
-     * Return Intent extra
+     * Intent to get the devices address
      */
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
@@ -45,7 +45,6 @@ public class MainActivity extends ActionBarActivity
      * Sets the tag for logging
      */
     private static final String TAG = "ScootyBus";
-
 
     /**
      * Gets the device's default Bluetooth Adapter
@@ -156,6 +155,19 @@ public class MainActivity extends ActionBarActivity
             Log.d(TAG, "Closing App");
             finish();
         }
+
+    }
+
+    /**
+     * Sends an ATI to the ELM327 chipset and checks it's return value
+     */
+    public void onSendATI(View view)
+    {
+
+        Log.d(TAG, "In onSendATI");
+        ; //noop
+        Log.d(TAG, "Finished onSendATI");
+
 
     }
 

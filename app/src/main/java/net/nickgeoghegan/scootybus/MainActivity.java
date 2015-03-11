@@ -202,14 +202,14 @@ public class MainActivity extends ActionBarActivity
 
         if (list.isEmpty() && mBluetoothAdapter.isEnabled())
         {
-            Toast.makeText(getApplicationContext(), "No Paired Devices", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "No Paired Devices");
+        Toast.makeText(getApplicationContext(), "No Paired Devices or Bluetooth is disabled", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "No Paired Devices or Bluetooth is disabled");
 
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Showing Paired Devices");
+        Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Showing Paired Devices");
 
         }
 

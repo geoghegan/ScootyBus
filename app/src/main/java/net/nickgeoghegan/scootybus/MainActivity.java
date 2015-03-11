@@ -86,6 +86,9 @@ public class MainActivity extends ActionBarActivity
              */
             finish();
         }
+
+        Log.d(TAG, "Finished OnCreate()");
+
     }
 
     /**
@@ -131,6 +134,8 @@ public class MainActivity extends ActionBarActivity
             Log.d(TAG, "Discovery is already enabled");
         }*/
 
+        Log.d(TAG, "Finished onButtonBluetoothConnect()");
+
     }
 
     public void onButtonCloseApp(View view)
@@ -165,6 +170,7 @@ public class MainActivity extends ActionBarActivity
     {
 
         Log.d(TAG, "In onSendATI");
+        onDestroy();
         ; //noop
         Log.d(TAG, "Finished onSendATI");
 
@@ -286,25 +292,17 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onDestroy()
     {
+        Log.d(TAG, "In onDestroy()");
+
         super.onDestroy();
 
         /**
-         * Disable discovery
-         * TODO: Maybe just call this without the if statement
+         * Disables discovery & bluetooth
          */
-        if (mBluetoothAdapter != null)
-        {
-            mBluetoothAdapter.cancelDiscovery();
-        }
+        mBluetoothAdapter.cancelDiscovery();
+        mBluetoothAdapter.disable();
 
-        /**
-         * Disable bluetooth
-         * TODO: Maybe just call this without the if statement
-         */
-        if (mBluetoothAdapter.isEnabled())
-        {
-            mBluetoothAdapter.disable();
-        }
+        Log.d(TAG, "In onDestroy()");
 
     }
 

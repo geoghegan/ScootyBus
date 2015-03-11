@@ -302,31 +302,47 @@ public class MainActivity extends ActionBarActivity
         mBluetoothAdapter.cancelDiscovery();
         mBluetoothAdapter.disable();
 
-        Log.d(TAG, "In onDestroy()");
+        Log.d(TAG, "Finished onDestroy()");
 
     }
 
     @Override
     public void onPause()
     {
+
+        Log.d(TAG, "In onPause()");
+
         super.onPause();
 
-        ; // noop
         /**
          * TODO: Release the bluetooth handler here
          */
 
+        /**
+         * Bluetooth discovery is a heavyweight task that kills battery
+         * Disable it if we're being paused, but leave bluetooth enabled
+         */
+        mBluetoothAdapter.cancelDiscovery();
+
+        Log.d(TAG, "Finished onPause()");
     }
 
     @Override
     public void onResume()
     {
+        Log.d(TAG, "In onResume()");
+
         super.onResume();
 
-        ; // noop
         /**
-         * TODO: Re-enable bluetooth and init the connection again
+         * If bluetooth was disabled when we were asleep, re-enable it
          */
+        if (!mBluetoothAdapter.isEnabled())
+        {
+            mBluetoothAdapter.enable();
+        }
+
+        Log.d(TAG, "Finished onResume()");
 
     }
 

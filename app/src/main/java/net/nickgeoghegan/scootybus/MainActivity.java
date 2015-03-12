@@ -1,6 +1,7 @@
 package net.nickgeoghegan.scootybus;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -20,11 +21,11 @@ import android.widget.ListView;
 import android.content.DialogInterface;
 
 
-
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 
 public class MainActivity extends ActionBarActivity
@@ -39,7 +40,18 @@ public class MainActivity extends ActionBarActivity
     /**
      * Intent to get the devices address
      */
-    public static String EXTRA_DEVICE_ADDRESS = "device_address";
+    public String REMOTE_DEVICE_ADDRESS = "device_address";
+
+    /**
+     * Sets the standard Serial Port Profile (SPP) UUID
+     */
+    private static final UUID uuidSPP = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+    /**
+     * Sets the socket
+     */
+    private BluetoothSocket mBluetoothSocket = null;
+
 
     /**
      * Sets the tag for logging
@@ -170,13 +182,70 @@ public class MainActivity extends ActionBarActivity
     {
 
         Log.d(TAG, "In onSendATI");
-        onDestroy();
+        onConnect();
         ; //noop
         Log.d(TAG, "Finished onSendATI");
 
-
     }
 
+    /**
+     * Connects to a device
+     */
+    public void onConnect()
+    {
+
+        Log.d(TAG, "In onConnect()");
+
+        Log.d(TAG, "Remote device's MAC is: " + REMOTE_DEVICE_ADDRESS);
+
+        /**
+         * Creates a pointer to the remote device using it's MAC address
+         */
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(REMOTE_DEVICE_ADDRESS);
+
+        /**
+         * Creates the socket
+         */
+        try
+        {
+            Log.d(TAG, "Attempting to create mBluetoothSocket");
+            mBluetoothSocket = device.createRfcommSocketToServiceRecord(uuidSPP);
+        }
+        catch (IOException e)
+        {
+            Log.d(TAG, "FATAL: In onConnect() and socket create failed: " + e.getMessage() + ".");
+        }
+
+        /**
+         * Create the connection
+         * This is a blocking operation!
+         */
+        Log.d(TAG, "Attempting to connect to remote device: " + REMOTE_DEVICE_ADDRESS);
+
+        try
+        {
+            mBluetoothSocket.connect();
+            Log.d(TAG, "Connected to remote device: " + REMOTE_DEVICE_ADDRESS);
+        }
+        catch (IOException e)
+        {
+            try
+            {
+                mBluetoothSocket.close();
+                Log.d(TAG, "Caught remote device connection failure: " + e.getMessage() + ".");
+            }
+            catch (IOException f)
+            {
+                Log.d(TAG, "FATAL: In onConnect() and unable to close socket during connection failure: " + f.getMessage() + ".");
+            }
+        }
+
+
+
+        Log.d(TAG, "Finished onConnect()");
+
+
+    }
     /**
      * Show a list of paired devices
      * TODO: Get rid of the button and just show a clickable list on startup
@@ -244,15 +313,10 @@ public class MainActivity extends ActionBarActivity
             Log.d(TAG, "Selected MAC Address: " + address );
 
             /**
-             * Creates the result Intent and includes the MAC address
+             * Sets the remote device address
              */
-            Intent intent = new Intent();
-            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+            REMOTE_DEVICE_ADDRESS = address;
 
-            /**
-             * Sets the result
-             */
-            setResult(Activity.RESULT_OK, intent);
             Log.d(TAG, "Finished OnItemClick()");
 
         }

@@ -112,6 +112,11 @@ public class MainActivity extends ActionBarActivity
          */
         mBluetoothAdapter.enable();
 
+        /**
+         * Show the list of already paired devices at startup
+         */
+        showDevices();
+
         Log.d(TAG, "Finished OnCreate()");
 
     }
@@ -224,7 +229,7 @@ public class MainActivity extends ActionBarActivity
         try
         {
             Log.d(TAG, "Attempting to create mBluetoothSocket");
-            mBluetoothSocket = device.createRfcommSocketToServiceRecord(uuidSPP);
+            mBluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(uuidSPP);
         }
         catch (IOException e)
         {
@@ -304,7 +309,7 @@ public class MainActivity extends ActionBarActivity
      * Show a list of paired devices
      * TODO: Get rid of the button and just show a clickable list on startup
      */
-    public void showDevices(View view)
+    public void showDevices()
     {
 
         Log.d(TAG, "In showDevices()");

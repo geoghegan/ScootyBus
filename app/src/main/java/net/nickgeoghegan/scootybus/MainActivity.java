@@ -114,53 +114,6 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    /**
-     * TODO: Remove the connection button altogether and init the BT interface on startup if it's not already enabled.
-     */
-
-    public void onButtonBluetoothConnect(View view)
-    {
-
-        Log.d(TAG, "In onButtonBluetoothConnect()");
-
-        /**
-         * Enables the bluetooth adapter, if it's disabled, and sets the device into discovery mode
-         */
-        if (!mBluetoothAdapter.isEnabled())
-        {
-            Intent enableBlueTooth = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBlueTooth, REQUEST_ENABLE_BLUETOOTH);
-            Toast.makeText(getApplicationContext(), "Enabling Bluetooth", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Enabling Bluetooth");
-
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Bluetooth is already enabled", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Bluetooth is already enabled");
-        }
-
-       /* *//**
-     * Enables bluetooth discovery, if it's not already enabled.
-     * TODO: Verify that this is actually needed in real life if we have already paired with a device
-     *//*
-        if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE)
-        {
-            Intent enableDiscovery = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            startActivityForResult(enableDiscovery, REQUEST_ENABLE_DISCOVERABILITY);
-            Toast.makeText(getApplicationContext(), "Enabling Discovery", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Enabling Discovery");
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Discovery is already enabled", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "Discovery is already enabled");
-        }*/
-
-        Log.d(TAG, "Finished onButtonBluetoothConnect()");
-
-    }
-
     public void onButtonCloseApp(View view)
     {
 
@@ -187,7 +140,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     * Sends an ATI to the ELM327 chipset and checks it's return value
+     * Sends an ATI to the ELM327 chipset
      */
     public void onSendATI(View view)
     {

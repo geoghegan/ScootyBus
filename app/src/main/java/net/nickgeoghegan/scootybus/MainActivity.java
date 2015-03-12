@@ -433,9 +433,13 @@ public class MainActivity extends ActionBarActivity
 
         /**
          * Bluetooth discovery is a heavyweight task that kills battery
-         * Disable it if we're being paused, but leave bluetooth enabled
          */
         mBluetoothAdapter.cancelDiscovery();
+
+        /**
+         * Disable bluetooth on pause to save battery (less important than discovery)
+         */
+        mBluetoothAdapter.disable();
 
         Log.d(TAG, "Finished onPause()");
     }

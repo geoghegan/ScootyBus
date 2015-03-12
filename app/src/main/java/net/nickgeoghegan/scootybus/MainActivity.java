@@ -152,6 +152,23 @@ public class MainActivity extends Activity
     }
 
     /**
+     * Lowers Windows
+     */
+    public void onSendLowerWindows(View view)
+    {
+
+        Log.d(TAG, "In onSendLowerWindows");
+
+        sendData("ATSP5");
+        sendData("ATWM 81 BC F0 81");
+        sendData("ATSH 83 BC F0");
+        sendData("30 03 01");
+        
+        Log.d(TAG, "Finished onSendLowerWindows");
+
+    }
+
+    /**
      * Connects to a device
      */
     public void onConnect()

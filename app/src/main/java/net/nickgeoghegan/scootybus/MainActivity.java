@@ -55,13 +55,6 @@ public class MainActivity extends ActionBarActivity
     private BluetoothSocket mBluetoothSocket = null;
 
     /**
-     * Sets the input and output streams
-     */
-    private OutputStream outputStream = null;
-    private InputStream inputStream = null;
-
-
-    /**
      * Sets the tag for logging
      */
     private static final String TAG = "ScootyBus";
@@ -196,13 +189,10 @@ public class MainActivity extends ActionBarActivity
     /**
      * Sends an ATI to the ELM327 chipset and checks it's return value
      */
-    public void onSendATI(View view)
+    public void onSendATI()
     {
-        /**
-         * TODO: Actually get this working as a real, non-testing, button
-         */
+
         Log.d(TAG, "In onSendATI");
-        onConnect();
         sendData("ATI");
         Log.d(TAG, "Finished onSendATI");
 
@@ -290,11 +280,29 @@ public class MainActivity extends ActionBarActivity
         /**
          * Sends the data
          */
-        Log.d(TAG, "Attempting to send: " + message + ".");
+        Log.d(TAG, "Attempting to send: " + rawMessage + ".");
         try
         {
+            /**
+             * Create output stream
+             */
+            Log.d(TAG, "Getting outputStream");
+            OutputStream outputStream = mBluetoothSocket.getOutputStream();
+            Log.d(TAG, "Got outputStream");
+
+            /**
+             * Actually writes the message
+             */
+            Log.d(TAG, "Attempting to write to outputStream");
             outputStream.write(messageBuffer);
             Log.d(TAG, "Sent: " + message);
+
+            /**
+             * Might as well flush
+             */
+            outputStream.flush();
+            Log.d(TAG, "Output stream flushed!");
+
         }
         catch(IOException e)
         {
@@ -375,6 +383,7 @@ public class MainActivity extends ActionBarActivity
              * Sets the remote device address
              */
             REMOTE_DEVICE_ADDRESS = address;
+            onConnect();
 
             Log.d(TAG, "Finished OnItemClick()");
 
@@ -440,52 +449,10 @@ public class MainActivity extends ActionBarActivity
 
         Log.d(TAG, "In onPause()");
 
-        /**
-         * Flush the outputStream when pausing
-         */
-        if (outputStream != null)
-        {
-            Log.d(TAG, "Output stream is non-null: " + outputStream);
-            try
-            {
-                outputStream.flush();
-                Log.d(TAG, "Output stream flushed!");
-            }
-            catch (IOException e)
-            {
-                Log.d(TAG, "FATAL: Failed to flush output stream: " + e.getMessage() + ".");
-            }
-        }
-
-        /**
-         * Close the bluetooth socket when pausing
-         */
-        Log.d(TAG, "Checking to see if the socket is connected");
-        if (mBluetoothSocket != null)
-        {
-            Log.d(TAG, "mBluetoothSocket is connected");
-            try
-            {
-                mBluetoothSocket.close();
-                Log.d(TAG, "Bluetooth socket closed!");
-            } catch (IOException f)
-            {
-                Log.d(TAG, "FATAL: Failed to close socket: " + f.getMessage() + ".");
-            }
-        }
-        
-        /**
-         * Bluetooth discovery is a heavyweight task that kills battery
-         */
-        mBluetoothAdapter.cancelDiscovery();
-
-        /**
-         * Disable bluetooth on pause to save battery (less important than discovery)
-         * TODO: Possibly remove this
-         */
-        mBluetoothAdapter.disable();
+        ; //noop
 
         Log.d(TAG, "Finished onPause()");
+
     }
 
     /**

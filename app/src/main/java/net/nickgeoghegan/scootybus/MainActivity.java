@@ -22,6 +22,8 @@ import android.content.DialogInterface;
 
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +53,12 @@ public class MainActivity extends ActionBarActivity
      * Sets the socket
      */
     private BluetoothSocket mBluetoothSocket = null;
+
+    /**
+     * Sets the input and output streams
+     */
+    private OutputStream outputStream = null;
+    private InputStream inputStream = null;
 
 
     /**
@@ -180,10 +188,12 @@ public class MainActivity extends ActionBarActivity
      */
     public void onSendATI(View view)
     {
-
+        /**
+         * TODO: Actually get this working as a real, non-testing, button
+         */
         Log.d(TAG, "In onSendATI");
         onConnect();
-        ; //noop
+        sendData("ATI");
         Log.d(TAG, "Finished onSendATI");
 
     }
@@ -240,12 +250,51 @@ public class MainActivity extends ActionBarActivity
             }
         }
 
-
-
         Log.d(TAG, "Finished onConnect()");
 
+    }
+
+    /**
+     * Sends arbitrary data to the remote device
+     */
+    public void sendData(String rawMessage)
+    {
+
+        Log.d(TAG, "In sendData()");
+
+        /**
+         * The ELM 327 needs a return and newline to run commands
+         */
+        String ELM_TERMINATOR = "\r\n";
+
+        /**
+         * Saves us having to specify the terminator for every command sent
+         */
+        String message = rawMessage + ELM_TERMINATOR;
+
+        /**
+         * Creates the messageBuffer, which is what we'll actually write to the outputStream
+         */
+        byte[] messageBuffer = message.getBytes();
+
+        /**
+         * Sends the data
+         */
+        Log.d(TAG, "Attempting to send: " + message + ".");
+        try
+        {
+            outputStream.write(messageBuffer);
+            Log.d(TAG, "Sent: " + message);
+        }
+        catch(IOException e)
+        {
+            Log.d(TAG, "FATAL: Exception occurred when attempting to send: " + message );
+        }
+
+        Log.d(TAG, "Finished SendData()");
 
     }
+
     /**
      * Show a list of paired devices
      * TODO: Get rid of the button and just show a clickable list on startup

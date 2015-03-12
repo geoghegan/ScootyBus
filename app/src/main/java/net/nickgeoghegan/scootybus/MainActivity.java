@@ -424,17 +424,48 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    
     @Override
     public void onPause()
     {
 
-        Log.d(TAG, "In onPause()");
-
         super.onPause();
 
+        Log.d(TAG, "In onPause()");
+
         /**
-         * TODO: Release the bluetooth handler here
+         * Flush the outputStream when pausing
          */
+        if (outputStream != null)
+        {
+            Log.d(TAG, "Output stream is non-null: " + outputStream);
+            try
+            {
+                outputStream.flush();
+                Log.d(TAG, "Output stream flushed!");
+            }
+            catch (IOException e)
+            {
+                Log.d(TAG, "FATAL: Failed to flush output stream: " + e.getMessage() + ".");
+            }
+        }
+
+        /**
+         * Close the bluetooth socket when pausing
+         */
+        Log.d(TAG, "Checking to see if the socket is connected");
+        if (mBluetoothSocket != null)
+        {
+            Log.d(TAG, "mBluetoothSocket is connected");
+            try
+            {
+                mBluetoothSocket.close();
+                Log.d(TAG, "Bluetooth socket closed!");
+            } catch (IOException f)
+            {
+                Log.d(TAG, "FATAL: Failed to close socket: " + f.getMessage() + ".");
+            }
+        }
 
         /**
          * Bluetooth discovery is a heavyweight task that kills battery
@@ -443,6 +474,7 @@ public class MainActivity extends ActionBarActivity
 
         /**
          * Disable bluetooth on pause to save battery (less important than discovery)
+         * TODO: Possibly remove this
          */
         mBluetoothAdapter.disable();
 

@@ -424,7 +424,9 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    
+    /**
+     * What to do then the app looses focus
+     */
     @Override
     public void onPause()
     {
@@ -466,7 +468,7 @@ public class MainActivity extends ActionBarActivity
                 Log.d(TAG, "FATAL: Failed to close socket: " + f.getMessage() + ".");
             }
         }
-
+        
         /**
          * Bluetooth discovery is a heavyweight task that kills battery
          */
@@ -481,6 +483,10 @@ public class MainActivity extends ActionBarActivity
         Log.d(TAG, "Finished onPause()");
     }
 
+    /**
+     * What to dow when the app regains focus
+     * TODO: Reconnect to the remote device.
+     */
     @Override
     public void onResume()
     {

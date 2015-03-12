@@ -107,6 +107,11 @@ public class MainActivity extends ActionBarActivity
             finish();
         }
 
+        /**
+         * Turn the bluetooth adaptor on when the app is started
+         */
+        mBluetoothAdapter.enable();
+
         Log.d(TAG, "Finished OnCreate()");
 
     }

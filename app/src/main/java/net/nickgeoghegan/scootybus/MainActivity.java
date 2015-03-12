@@ -107,7 +107,12 @@ public class MainActivity extends Activity
 
         /**
          * Show the list of already paired devices at startup
+         * The noop is to populate the list on app startup if the adaptor isn't fully turned on
          */
+        while(mBluetoothAdapter.getState() !=  BluetoothAdapter.STATE_ON )
+        {
+            ; // noop
+        }
         showDevices();
 
         Log.d(TAG, "Finished OnCreate()");
@@ -163,7 +168,7 @@ public class MainActivity extends Activity
         sendData("ATWM 81 BC F0 81");
         sendData("ATSH 83 BC F0");
         sendData("30 03 01");
-        
+
         Log.d(TAG, "Finished onSendLowerWindows");
 
     }
@@ -291,6 +296,7 @@ public class MainActivity extends Activity
     {
 
         Log.d(TAG, "In showDevices()");
+
         pairedDevices = mBluetoothAdapter.getBondedDevices();
         listView = (ListView) findViewById(R.id.listView);
         ArrayList list = new ArrayList();

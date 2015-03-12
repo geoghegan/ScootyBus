@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends Activity
 {
 
     /**

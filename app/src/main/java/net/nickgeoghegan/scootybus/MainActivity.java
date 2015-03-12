@@ -189,7 +189,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Sends an ATI to the ELM327 chipset and checks it's return value
      */
-    public void onSendATI()
+    public void onSendATI(View view)
     {
 
         Log.d(TAG, "In onSendATI");

@@ -34,12 +34,6 @@ public class MainActivity extends Activity
 {
 
     /**
-     * Intent Request Codes
-     */
-    private static final int REQUEST_ENABLE_BLUETOOTH = 1;
-    private static final int REQUEST_ENABLE_DISCOVERABILITY = 2;
-
-    /**
      * Intent to get the devices address
      */
     public String REMOTE_DEVICE_ADDRESS = "device_address";
@@ -312,16 +306,10 @@ public class MainActivity extends Activity
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(mDeviceClickListener);
 
-        if (list.isEmpty() && mBluetoothAdapter.isEnabled())
+        if (list.isEmpty())
         {
-        Toast.makeText(getApplicationContext(), "No Paired Devices or Bluetooth is disabled", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "No Paired Devices or Bluetooth is disabled");
-
-        }
-        else
-        {
-        Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Showing Paired Devices");
+            Toast.makeText(getApplicationContext(), "No Paired Devices or Bluetooth is disabled", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "No Paired Devices or Bluetooth is disabled");
 
         }
 

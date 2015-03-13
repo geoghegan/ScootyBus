@@ -34,6 +34,14 @@ public class MainActivity extends Activity
 {
 
     /**
+     * State to track if we're connected
+     */
+    public static final int STATE_NOT_CONNECTED = 3;
+    public static final int STATE_CONNECTED = 6;
+    private int mState;
+
+
+    /**
      * Intent to get the devices address
      */
     public String REMOTE_DEVICE_ADDRESS = "device_address";
@@ -150,7 +158,21 @@ public class MainActivity extends Activity
     {
 
         Log.d(TAG, "In onSendATI");
-        sendData("ATI");
+
+        /**
+         * App gets killed by Android if it tries to sendData without the socket being ready
+         */
+        if(mState == STATE_CONNECTED)
+        {
+            sendData("ATI");
+            Log.d(TAG, "STATE_CONNECTED: calling sendData(ATI)");
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Please connect to a device first!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Tried to sendData - can't as not connected");
+        }
+
         Log.d(TAG, "Finished onSendATI");
 
     }
@@ -210,6 +232,14 @@ public class MainActivity extends Activity
         {
             mBluetoothSocket.connect();
             Log.d(TAG, "Connected to remote device: " + REMOTE_DEVICE_ADDRESS);
+            Toast.makeText(getApplicationContext(), "Connected to " + device.getName(), Toast.LENGTH_SHORT).show();
+
+
+            /**
+             * Sets the connection state
+             */
+            mState = STATE_CONNECTED;
+            Log.d(TAG, "Setting STATE_CONNECTED");
         }
         catch (IOException e)
         {
@@ -289,7 +319,6 @@ public class MainActivity extends Activity
 
     /**
      * Show a list of paired devices
-     * TODO: Get rid of the button and just show a clickable list on startup
      */
     public void showDevices()
     {
@@ -389,7 +418,6 @@ public class MainActivity extends Activity
      * Clean up the bluetooth system when shutting down
      * Kinda negates the work done in onButtonCloseApp()
      */
-
     @Override
     protected void onDestroy()
     {

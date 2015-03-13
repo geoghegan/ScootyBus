@@ -101,7 +101,12 @@ public class MainActivity extends Activity
 
         /**
          * Show the list of already paired devices at startup
-         * The noop is to populate the list on app startup if the adaptor isn't fully turned on
+         *
+         * The noop / while loop combo is there as a spinner to populate the
+         * device list on app startup if the adaptor isn't fully turned on.
+         * TODO: Make the spinner a bit more elegant
+         * TODO: Replace with self made Adapter states
+         * TODO: This will help with crashing on sendData when not connected
          */
         while(mBluetoothAdapter.getState() !=  BluetoothAdapter.STATE_ON )
         {

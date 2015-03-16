@@ -113,8 +113,6 @@ public class MainActivity extends Activity
          * The noop / while loop combo is there as a spinner to populate the
          * device list on app startup if the adaptor isn't fully turned on.
          * TODO: Make the spinner a bit more elegant
-         * TODO: Replace with self made Adapter states
-         * TODO: This will help with crashing on sendData when not connected
          */
         while(mBluetoothAdapter.getState() !=  BluetoothAdapter.STATE_ON )
         {
@@ -315,7 +313,7 @@ public class MainActivity extends Activity
         {
 
             Log.d(TAG, "FATAL: Exception occurred when attempting to send: " + message );
-            
+
         }
 
         Log.d(TAG, "Finished SendData()");

@@ -164,6 +164,53 @@ public class MainActivity extends Activity
 
     }
 
+    public void onSendSetProtocol(View view)
+    {
+
+        Log.d(TAG, "In onSendATI");
+
+        sendData("ATSP5");
+        Log.d(TAG, "STATE_CONNECTED: calling sendData(ATSP5)");
+
+        Log.d(TAG, "Finished onSendATI");
+
+    }
+
+    public void onSendSetWakeup(View view)
+    {
+
+        Log.d(TAG, "In onSendATI");
+
+        sendData("ATWM 81 BC F0 81");
+        Log.d(TAG, "STATE_CONNECTED: calling sendData(ATWM 81 BC F0 81)");
+
+        Log.d(TAG, "Finished onSendATI");
+
+    }
+
+    public void onSendSetHeader(View view)
+    {
+
+        Log.d(TAG, "In onSendATI");
+
+        sendData("ATSH 83 BC F0");
+        Log.d(TAG, "STATE_CONNECTED: calling sendData(ATWM 81 BC F0 81)");
+
+        Log.d(TAG, "Finished onSendATI");
+
+    }
+    public void onSendLW(View view)
+    {
+
+        Log.d(TAG, "In onSendATI");
+
+        sendData("30 03 01");
+        Log.d(TAG, "STATE_CONNECTED: calling sendData(ATWM 81 BC F0 81)");
+
+        Log.d(TAG, "Finished onSendATI");
+
+    }
+
     /**
      * Lowers Windows
      */

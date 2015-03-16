@@ -159,19 +159,8 @@ public class MainActivity extends Activity
 
         Log.d(TAG, "In onSendATI");
 
-        /**
-         * App gets killed by Android if it tries to sendData without the socket being ready
-         */
-        if(mState == STATE_CONNECTED)
-        {
-            sendData("ATI");
-            Log.d(TAG, "STATE_CONNECTED: calling sendData(ATI)");
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Please connect to a device first!", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Tried to sendData - can't as not connected");
-        }
+        sendData("ATI");
+        Log.d(TAG, "STATE_CONNECTED: calling sendData(ATI)");
 
         Log.d(TAG, "Finished onSendATI");
 
@@ -287,30 +276,46 @@ public class MainActivity extends Activity
         Log.d(TAG, "Attempting to send: " + rawMessage + ".");
         try
         {
-            /**
-             * Create output stream
-             */
-            Log.d(TAG, "Getting outputStream");
-            OutputStream outputStream = mBluetoothSocket.getOutputStream();
-            Log.d(TAG, "Got outputStream");
 
             /**
              * Actually writes the message
              */
-            Log.d(TAG, "Attempting to write to outputStream");
-            outputStream.write(messageBuffer);
-            Log.d(TAG, "Sent: " + message);
+            if(mState == STATE_CONNECTED)
+            {
 
-            /**
-             * Might as well flush
-             */
-            outputStream.flush();
-            Log.d(TAG, "Output stream flushed!");
+                /**
+                 * Create output stream
+                 */
+                Log.d(TAG, "STATE_CONNECTED: Create outputStream");
+                OutputStream outputStream = mBluetoothSocket.getOutputStream();
+                Log.d(TAG, "STATE_CONNECTED: Got outputStream");
+
+                /**
+                 * Actually send the message
+                 */
+                outputStream.write(messageBuffer);
+                Log.d(TAG, "Sent: " + message);
+
+                /**
+                 * Flush the output stream
+                 */
+                outputStream.flush();
+
+            }
+            else
+            {
+
+                Toast.makeText(getApplicationContext(), "Please connect to a device first!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Tried to sendData - can't as not connected");
+
+            }
 
         }
         catch(IOException e)
         {
+
             Log.d(TAG, "FATAL: Exception occurred when attempting to send: " + message );
+            
         }
 
         Log.d(TAG, "Finished SendData()");
